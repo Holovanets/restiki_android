@@ -5,14 +5,14 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface AuthApi {
-    @POST("auth/by-phone/request-auth")
-    suspend fun requestCode(@Body request: PhoneRequest): Response<RequestCodeResponse>
+    @POST("auth/by-phone/request-auth") // Исправлен эндпоинт
+    suspend fun requestCode(@Body request: RequestCodeRequest): Response<RequestCodeResponse>
 
-    @POST("auth/by-phone/auth-code")
+    @POST("auth/by-phone/auth-code") // Соответствует скриншоту
     suspend fun verifyCode(@Body request: CodeRequest): Response<VerifyResponse>
 }
 
-data class PhoneRequest(val phone: String)
+data class RequestCodeRequest(val phone: String)
 data class CodeRequest(val phone: String, val code: String)
 
 data class RequestCodeResponse(

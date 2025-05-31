@@ -62,16 +62,16 @@ fun PhoneScreen(
         }
     }
 
-    LaunchedEffect(state.isSuccess) {
-        if (state.isSuccess) {
-            onNavigateToCode()
+    LaunchedEffect(state.isCodeRequested) {
+        if (state.isCodeRequested) {
+            onNavigateToCode() // Переход на CodeScreen только после успешного requestCode
         }
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF1C2526))
+            .background(Color(0xFF070707))
             .safeDrawingPadding()
     ) {
         Column(
@@ -84,8 +84,9 @@ fun PhoneScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0x1AFFFFFF), shape = MaterialTheme.shapes.medium)
-                    .padding(horizontal = 20.dp, vertical = 12.dp),
+                    .background(Color(0x1AFFFFFF), shape = MaterialTheme.shapes.large)
+                    .padding(horizontal = 20.dp)
+                    .height(56.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -149,7 +150,7 @@ fun PhoneScreen(
             )
             Text(
                 text = "збором та обробкою персональних даних",
-                color = Color(0xFF007FBA),
+                color = Color(0xFFC1272D),
                 fontSize = 12.sp,
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                 modifier = Modifier.clickable(
@@ -164,7 +165,9 @@ fun PhoneScreen(
             Button(
                 onClick = {
                     if (isNumberComplete) {
-                        viewModel.requestCode("+380${phoneNumber.replace(" ", "")}")
+                        val fullPhone = "+380${phoneNumber.replace(" ", "")}"
+                        println("PhoneScreen: Requesting code for phone=$fullPhone")
+                        viewModel.requestCode(fullPhone)
                         keyboardController?.hide()
                     } else {
                         showError = true
@@ -172,14 +175,14 @@ fun PhoneScreen(
                 },
                 enabled = !state.isLoading,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isNumberComplete) Color(0xFF007FBA) else Color(0x26007FBA),
+                    containerColor = if (isNumberComplete) Color(0xFFC1272D) else Color(0x26C1272D),
                     contentColor = if (isNumberComplete) Color(0xFFFFFFFF) else Color(0x80FFFFFF)
                 ),
-                shape = MaterialTheme.shapes.medium,
+
+                shape = MaterialTheme.shapes.large,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 15.dp)
-                    .height(48.dp)
+                    .height(56.dp),
             ) {
                 Text(
                     text = if (state.isLoading) "Секунду..." else "Продовжити",
